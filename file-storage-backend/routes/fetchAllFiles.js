@@ -8,19 +8,19 @@ var { GetObjectCommand } = require('@aws-sdk/client-s3');
 router.get('/', async (req, res) => {
     try {
         var files = await File.find().sort({ createdAt: -1 });
-        var s3Files = [];
-        for (var file of files) {
-            var getCommand = new GetObjectCommand({
-                Bucket: config.s3.bucketName,
-                Key: file.s3Key,
-            });
-            var s3File = await s3.send(getCommand);
-            s3Files.push({ s3File, metadata: { fileName: file.fileName, fileType: file.fileType, fileSize: file.fileSize, s3Key: file.s3Key, uploadedBy: file.uploadedBy } });
-        }
+        // var s3Files = [];
+        // for (var file of files) {
+        //     var getCommand = new GetObjectCommand({
+        //         Bucket: config.s3.bucketName,
+        //         Key: file.s3Key,
+        //     });
+        //     var s3File = await s3.send(getCommand);
+        //     s3Files.push({ s3File, metadata: { fileName: file.fileName, fileType: file.fileType, fileSize: file.fileSize, s3Key: file.s3Key, uploadedBy: file.uploadedBy } });
+        // }
         return res.status(200).json({
             message: 'Files fetched successfully',
             count: files.length,
-            files: s3Files,
+            files: files,
         });
     } catch (err) {
         console.error('Fetch error:', err);

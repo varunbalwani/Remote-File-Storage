@@ -8,7 +8,7 @@ module.exports = {
         forcePathStyle: true,
     },
     db: {
-        url: process.env.DATABASE_URL,
+        url: process.env.DATABASE_URL || 'mongodb+srv://varunbalwani123_db_user:S8iHwlIUcR3vISTW@cluster69.5a6z6jg.mongodb.net/file_storage?retryWrites=true&w=majority&appName=Cluster69',
     },
     port: process.env.PORT || 3000,
 };

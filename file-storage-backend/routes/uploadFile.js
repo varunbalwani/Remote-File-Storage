@@ -8,7 +8,7 @@ var File = require('../models/File');
 
 var upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 50 * 1024 * 1024 },
+  limits: { fileSize: 500 * 1024 * 1024 },
   fileFilter: function (req, file, cb) {
     cb(null, true);
   },
@@ -18,7 +18,7 @@ var BUCKET_NAME = config.s3.bucketName;
 
 router.put('/', upload.single('file'), async (req, res) => {
   var s3Key = null;
-
+  console.log(req.file);
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No file provided' });
