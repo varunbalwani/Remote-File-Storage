@@ -4,9 +4,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
 const connectDB = require('./config/database');
 
-// Connect to Database
 connectDB();
 
 var indexRouter = require('./routes/index');
@@ -15,6 +15,8 @@ var downloadFileRouter = require('./routes/downloadFile');
 var fetchAllFilesRouter = require('./routes/fetchAllFiles');
 
 var app = express();
+
+app.use(cors());
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
