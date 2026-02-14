@@ -51,30 +51,30 @@ export default function FileUpload() {
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-4">Upload File</h2>
+            <h2 className="text-2xl font-bold mb-4 text-gray-900">Upload File</h2>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Your Name (Optional)</label>
+              <label className="block text-sm font-medium mb-2 text-gray-700">Your Name (Optional)</label>
               <input
                 type="text"
                 value={uploadedBy}
                 onChange={(e) => setUploadedBy(e.target.value)}
                 placeholder="anonymous"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder:text-gray-500"
               />
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Select File</label>
+              <label className="block text-sm font-medium mb-2 text-gray-700">Select File</label>
               <input
                 ref={fileInputRef}
                 type="file"
                 onChange={handleFileSelect}
                 accept={acceptedTypes}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
               />
               {selectedFile && (
-                <p className="mt-2 text-sm text-gray-600">
+                <p className="mt-1 text-sm text-gray-600">
                   Selected: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
                 </p>
               )}
