@@ -40,7 +40,7 @@ export default function FileList() {
   if (files.length === 0) {
     return (
       <div className="text-center py-12 text-gray-500">
-        <p className="text-xl">No files uploaded yet</p>
+        <p className="text-xl text-gray-700">No files uploaded yet</p>
         <p className="mt-2">Click the "Upload File" button to get started</p>
       </div>
     );
@@ -60,11 +60,11 @@ export default function FileList() {
               <h3 className="font-medium text-gray-900 truncate" title={file.fileName}>
                 {file.fileName}
               </h3>
-              <p className="text-sm text-gray-500 mt-1">{formatFileSize(file.fileSize)}</p>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-sm text-gray-600 mt-1">{formatFileSize(file.fileSize)}</p>
+              <p className="text-xs text-gray-500 mt-1">
                 Uploaded by {file.uploadedBy}
               </p>
-              <p className="text-xs text-gray-400">{formatDate(file.createdAt)}</p>
+              <p className="text-xs text-gray-500">{formatDate(file.createdAt)}</p>
               {isViewableFile(file.fileType) && (
                 <span className="inline-block mt-2 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
                   Click to view
