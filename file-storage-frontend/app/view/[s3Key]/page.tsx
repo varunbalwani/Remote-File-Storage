@@ -23,16 +23,14 @@ export default function ViewFile() {
 
     const fetchContent = async () => {
       try {
+        const isBinary = file.fileType.startsWith('image/') || file.fileType === 'application/pdf';
+
         const response = await axios.get(`${API_URL}/downloadFile/${encodeURIComponent(s3Key)}`, {
-          responseType: file.fileType.startsWith('image/') ? 'blob' : 'text',
+          responseType: isBinary ? 'blob' : 'text',
         });
 
-        if (file.fileType.startsWith('image/')) {
-          const url = URL.createObjectURL(response.data);
-          setContent(url);
-        } else if (file.fileType === 'application/pdf') {
-          const blob = new Blob([response.data], { type: 'application/pdf' });
-          const url = URL.createObjectURL(blob);
+        if (isBinary) {
+          const url = URL.createObjectURL(new Blob([response.data], { type: file.fileType }));
           setContent(url);
         } else {
           setContent(response.data);

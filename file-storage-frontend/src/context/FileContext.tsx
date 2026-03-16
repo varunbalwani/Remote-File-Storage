@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import axios from 'axios';
+import { uploadFileMultipart, abortUpload, type UploadProgress } from '@/utils/multipartUpload';
 
 interface FileMetadata {
   _id: string;
@@ -18,6 +19,7 @@ interface FileContextType {
   files: FileMetadata[];
   loading: boolean;
   error: string | null;
+  uploadProgress: UploadProgress | null;
   fetchFiles: () => Promise<void>;
   uploadFile: (file: File, uploadedBy?: string) => Promise<void>;
   downloadFile: (s3Key: string, fileName: string) => Promise<void>;
@@ -31,6 +33,7 @@ export function FileProvider({ children }: { children: React.ReactNode }) {
   const [files, setFiles] = useState<FileMetadata[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<UploadProgress | null>(null);
 
   const fetchFiles = useCallback(async () => {
     setLoading(true);
@@ -46,25 +49,20 @@ export function FileProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const uploadFile = useCallback(async (file: File, uploadedBy: string = 'anonymous') => {
-    setLoading(true);
     setError(null);
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('uploadedBy', uploadedBy);
+    setUploadProgress({ uploadedParts: 0, totalParts: 1, percentage: 0 });
 
-      await axios.put(`${API_URL}/uploadFile`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+    try {
+      await uploadFileMultipart(file, uploadedBy, (progress) => {
+        setUploadProgress(progress);
       });
 
+      setUploadProgress(null);
       await fetchFiles();
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to upload file');
+      setUploadProgress(null);
+      setError(err.response?.data?.error || err.message || 'Failed to upload file');
       throw err;
-    } finally {
-      setLoading(false);
     }
   }, [fetchFiles]);
 
@@ -89,7 +87,7 @@ export function FileProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <FileContext.Provider value={{ files, loading, error, fetchFiles, uploadFile, downloadFile }}>
+    <FileContext.Provider value={{ files, loading, error, uploadProgress, fetchFiles, uploadFile, downloadFile }}>
       {children}
     </FileContext.Provider>
   );
